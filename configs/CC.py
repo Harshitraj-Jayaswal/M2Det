@@ -1,4 +1,4 @@
-import os.path as osp
+import os.path as osp #Has useful functions on Pathnames
 import sys
 from argparse import ArgumentParser
 from collections import Iterable
@@ -76,15 +76,15 @@ class Config(object):
 
     @staticmethod
     def fromfile(filename):
-        filename = osp.abspath(osp.expanduser(filename))
+        filename = osp.abspath(osp.expanduser(filename)) #Gives filename
         check_file_exist(filename)
         if filename.endswith('.py'):
-            module_name = osp.basename(filename)[:-3]
+            module_name = osp.basename(filename)[:-3] #removing .py from the filename, giving modulename
             if '.' in module_name:
                 raise ValueError('Dots are not allowed in config file path.')
-            config_dir = osp.dirname(filename)
-            sys.path.insert(0, config_dir)
-            mod = import_module(module_name)
+            config_dir = osp.dirname(filename) #giving directory name 
+            sys.path.insert(0, config_dir) #adding directory name in the interpretor search path for modules
+            mod = import_module(module_name) #importing the whole module_name
             sys.path.pop(0)
             cfg_dict = {
                 name: value
