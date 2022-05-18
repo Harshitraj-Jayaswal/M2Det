@@ -1,4 +1,4 @@
-import os
+import os  #Provides functions for interacting with the Operating System. Functions like interactiong with file system.
 import cv2
 import numpy as np
 import time
@@ -6,20 +6,24 @@ from torch.multiprocessing import Pool
 from utils.nms_wrapper import nms
 from utils.timer import Timer
 from configs.CC import Config
-import argparse
+import argparse #Helps to create a program in a command line environment in a way that appears not only easy to use but also improves interaction 
 from layers.functions import Detect, PriorBox
 from m2det import build_net
 from data import BaseTransform
 from utils.core import *
 from utils.pycocotools.coco import COCO
 
+#Creating a argeparse object named Parser 
 parser = argparse.ArgumentParser(description='M2Det Testing')
+
+#Adding the arguments for the Parser object, meaning, how to take arguments from the command line
 parser.add_argument('-c', '--config', default='configs/m2det320_vgg.py', type=str)
 parser.add_argument('-f', '--directory', default='imgs/', help='the path to demo images')
 parser.add_argument('-m', '--trained_model', default=None, type=str, help='Trained state_dict file path to open')
 parser.add_argument('--video', default=False, type=bool, help='videofile mode')
 parser.add_argument('--cam', default=-1, type=int, help='camera device id')
 parser.add_argument('--show', action='store_true', help='Whether to display the images')
+#The information gathered above(add arguments) is stored and used when parsing through parse_args(). Now, the arguments added are stored in args variable.
 args = parser.parse_args()
 
 print_info(' ----------------------------------------------------------------------\n'
