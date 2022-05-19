@@ -31,20 +31,22 @@ print_info(' -------------------------------------------------------------------
            ' ----------------------------------------------------------------------', ['yellow','bold'])
 
 global cfg
-cfg = Config.fromfile(args.config)
-anchor_config = anchors(cfg)
+cfg = Config.fromfile(args.config) #Gives file name and nueral network configuration in the form of dictionary
+anchor_config = anchors(cfg) #Gives anchor configurartion in the form of dictionary
 print_info('The Anchor info: \n{}'.format(anchor_config))
-priorbox = PriorBox(anchor_config)
+priorbox = PriorBox(anchor_config) #Created Priorbox object which stored anchor configurations in its varaiables
+
 net = build_net('test',
                 size = cfg.model.input_size,
-                config = cfg.model.m2det_config)
-init_net(net, cfg, args.trained_model)
+                config = cfg.model.m2det_config) #Buiding the M2Det network with congigurations stord in cfg. net is the object of M2det class
+init_net(net, cfg, args.trained_model) #Loading the pretrained weights of the network from the args.trained_model
 print_info('===> Finished constructing and loading model',['yellow','bold'])
-net.eval()
-with torch.no_grad():
-    priors = priorbox.forward()
-    if cfg.test_cfg.cuda:
-        net = net.cuda()
+net.eval() #Evaluation of model
+
+with torch.no_grad(): #torch.no_grad() disables gradient calculations
+    priors = priorbox.forward() #Anchor box coordinates for each feature map and for each feature map pixels
+    if cfg.test_cfg.cuda: 
+        net = net.cuda() #torch.cuda() package adds support for CUDA tensor types, that implement the same function as CPU tensors, but they utilize GPUs for computation.
         priors = priors.cuda()
         cudnn.benchmark = True
     else:
@@ -84,9 +86,9 @@ def draw_detection(im, bboxes, scores, cls_inds, fps, thr=0.2):
 
     return imgcv
 
-im_path = args.directory
-cam = args.cam
-video = args.video
+im_path = args.directory #Path for input images file
+cam = args.cam #For camera image as input
+video = args.video # For video input
 if cam >= 0:
     capture = cv2.VideoCapture(cam)
     video_path = './cam'
