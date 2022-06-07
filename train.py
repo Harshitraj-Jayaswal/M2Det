@@ -1,12 +1,13 @@
 from __future__ import print_function
-import os
-import warnings
+import os  #Provides functions for interacting with the Operating System. Functions like interactiong with file system.
+import warnings 
 warnings.filterwarnings('ignore')
 
 import time
 import torch
 import shutil
-import argparse
+import argparse '''Helps to create a program in a command line environment in a way that appears not only easy to use but also improves 
+interaction with the help of arguments passed during the calling of the program.'''
 from m2det import build_net
 import torch.utils.data as data
 import torch.backends.cudnn as cudnn
@@ -15,14 +16,20 @@ from data import detection_collate
 from configs.CC import Config
 from utils.core import *
 
+#Creating the argeparse object that will store all the necessary information that has to be passed from python command line
 parser = argparse.ArgumentParser(description='M2Det Training')
+
+#Adding the arguments for the Parser object, meaning, how to take arguments from the command line
 parser.add_argument('-c', '--config', default='configs/m2det320_vgg16.py')
 parser.add_argument('-d', '--dataset', default='COCO', help='VOC or COCO dataset')
 parser.add_argument('--ngpu', default=1, type=int, help='gpus')
 parser.add_argument('--resume_net', default=None, help='resume net for retraining')
 parser.add_argument('--resume_epoch', default=0, type=int, help='resume iter for retraining')
 parser.add_argument('-t', '--tensorboard', type=bool, default=False, help='Use tensorborad to show the Loss Graph')
-args = parser.parse_args()
+
+args = parser.parse_args() 
+'''The data is initially stored in sys.argv array in a string format. 
+Calling parse_args() with the command-line data first converts them into the required data type and then invokes the appropriate action to produce a result.'''
 
 print_info('----------------------------------------------------------------------\n'
            '|                       M2Det Training Program                       |\n'
