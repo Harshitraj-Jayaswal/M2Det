@@ -29,17 +29,17 @@ class M2Det(nn.Module):
         M2Det: Multi-level Multi-scale single-shot object Detector
         '''
         super(M2Det,self).__init__()
-        self.phase = phase
-        self.size = size
-        self.init_params(config)
+        self.phase = phase #giving the phase i.e train or test
+        self.size = size #input size (here-512)
+        self.init_params(config) 
         print_info('===> Constructing M2Det model', ['yellow','bold'])
         self.construct_modules()
 
-    def init_params(self, config=None): # Directly read the config
+    def init_params(self, config=None): # Directly read the config and making the config dictionary key as object attribute and storing the values in it.
         assert config is not None, 'Error: no config'
         for key,value in config.items():
-            if check_argu(key,value):
-                setattr(self, key, value)
+            if check_argu(key,value): #checking the configs whether it supports or not like backbone used, net-family, whethaer base feature is made up of atleast 2 backbone features or not,etc.
+                setattr(self, key, value) #making the object of m2det (here net) variables as key in configs( i.e. backbone,base-out,net-family,etc) and setting it the value in configs to these variables.
 
     def construct_modules(self,):
         # construct tums
