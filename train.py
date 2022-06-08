@@ -28,8 +28,7 @@ parser.add_argument('--resume_epoch', default=0, type=int, help='resume iter for
 parser.add_argument('-t', '--tensorboard', type=bool, default=False, help='Use tensorborad to show the Loss Graph')
 
 args = parser.parse_args() 
-'''The data is initially stored in sys.argv array in a string format. 
-Calling parse_args() with the command-line data first converts them into the required data type and then invokes the appropriate action to produce a result.'''
+'''The information gathered above is stored and used when arguments are parsed through parse_args().'''
 
 print_info('----------------------------------------------------------------------\n'
            '|                       M2Det Training Program                       |\n'
@@ -37,10 +36,12 @@ print_info('--------------------------------------------------------------------
 
 logger = set_logger(args.tensorboard)
 global cfg
-cfg = Config.fromfile(args.config)
+cfg = Config.fromfile(args.config) #Gives file name and nueral network configuration in the form of dictionary
+
 net = build_net('train', 
                 size = cfg.model.input_size, # Only 320, 512, 704 and 800 are supported
-                config = cfg.model.m2det_config)
+                config = cfg.model.m2det_config) #Buiding the M2Det network with configurations stored in cfg. net is the object of M2det class
+
 init_net(net, cfg, args.resume_net) # init the network with pretrained weights or resumed weights
 
 if args.ngpu>1:
@@ -49,8 +50,8 @@ if cfg.train_cfg.cuda:
     net.cuda()
     cudnn.benchmark = True
 
-optimizer = set_optimizer(net, cfg)
-criterion = set_criterion(cfg)
+optimizer = set_optimizer(net, cfg) #for gradient descent
+criterion = set_criterion(cfg) #for 
 priorbox = PriorBox(anchors(cfg))
 
 with torch.no_grad():
