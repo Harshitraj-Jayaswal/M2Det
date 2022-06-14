@@ -50,11 +50,11 @@ if cfg.train_cfg.cuda:
     net.cuda()
     cudnn.benchmark = True
 
-optimizer = set_optimizer(net, cfg) #for gradient descent
-criterion = set_criterion(cfg) #for 
-priorbox = PriorBox(anchors(cfg))
+optimizer = set_optimizer(net, cfg) #initializing optimizer for weight updates and using stochastic gradient descent
+criterion = set_criterion(cfg) #initializing criterion for Multibox loss calculation
+priorbox = PriorBox(anchors(cfg)) #initilaizing priorbox to Compute priorbox coordinates in center-offset form for each source feature map.
 
-with torch.no_grad():
+with torch.no_grad(): #under torch.no_grad, all the things are not saved to use it for gradient calculation
     priors = priorbox.forward()
     if cfg.train_cfg.cuda:
         priors = priors.cuda()
