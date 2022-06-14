@@ -60,7 +60,7 @@ with torch.no_grad(): #under torch.no_grad, all the things are not saved to use 
         priors = priors.cuda()
 
 if __name__ == '__main__':
-    net.train()
+    net.train() #model.train() tells your model that you are training the model (Here, model is net)
     epoch = args.resume_epoch
     print_info('===> Loading Dataset...',['yellow','bold'])
     dataset = get_dataloader(cfg, args.dataset, 'train_sets')
