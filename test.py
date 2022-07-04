@@ -28,8 +28,8 @@ print_info('--------------------------------------------------------------------
 global cfg
 cfg = Config.fromfile(args.config)
 if not os.path.exists(cfg.test_cfg.save_folder):
-    os.mkdir(cfg.test_cfg.save_folder)
-anchor_config = anchors(cfg)
+    os.mkdir(cfg.test_cfg.save_folder) #Making eval folder
+anchor_config = anchors(cfg) #Anchor configurations
 print_info('The Anchor info: \n{}'.format(anchor_config))
 priorbox = PriorBox(anchor_config)
 with torch.no_grad():
@@ -94,10 +94,10 @@ if __name__ == '__main__':
     detector = Detect(cfg.model.m2det_config.num_classes, cfg.loss.bkg_label, anchor_config)
     '''Decode location preds, apply non-maximum suppression to location predictions based on conf
     scores and threshold to a top_k number of output predictions for both
-    confidence score and locations.'''
+    confidence score and locations. Initailizing the Detect() function here'''
 
-    save_folder = os.path.join(cfg.test_cfg.save_folder, args.dataset)
-    _preprocess = BaseTransform(cfg.model.input_size, cfg.model.rgb_means, (2, 0, 1))
+    save_folder = os.path.join(cfg.test_cfg.save_folder, args.dataset) #save_folder=eval/COCO
+    _preprocess = BaseTransform(cfg.model.input_size, cfg.model.rgb_means, (2, 0, 1)) #Initializing BaseTransorm() function here for image preporcessing
     test_net(save_folder, 
              net, 
              detector, 
