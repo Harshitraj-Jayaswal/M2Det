@@ -76,18 +76,26 @@ def test_net(save_folder, net, detector, cuda, testset, transform, max_per_image
 if __name__ == '__main__':
     net = build_net('test',
                     size = cfg.model.input_size,
-                    config = cfg.model.m2det_config)
-    init_net(net, cfg, args.trained_model)
+                    config = cfg.model.m2det_config) #Building the model
+    init_net(net, cfg, args.trained_model) #Loading the pretrained weights for the model       
     print_info('===> Finished constructing and loading model',['yellow','bold'])
-    net.eval()
+
+    net.eval() #Mentioning model is for evaluation
+           
     _set = 'eval_sets' if not args.test else 'test_sets'
-    testset = get_dataloader(cfg, args.dataset, _set)
+    testset = get_dataloader(cfg, args.dataset, _set) #Loading the test dataset with the help of class
+           
     if cfg.test_cfg.cuda:
-        net = net.cuda()
+        net = net.cuda() #network will load in gpu
         cudnn.benchmark = True
     else:
         net = net.cpu()
+
     detector = Detect(cfg.model.m2det_config.num_classes, cfg.loss.bkg_label, anchor_config)
+    '''Decode location preds, apply non-maximum suppression to location predictions based on conf
+    scores and threshold to a top_k number of output predictions for both
+    confidence score and locations.'''
+
     save_folder = os.path.join(cfg.test_cfg.save_folder, args.dataset)
     _preprocess = BaseTransform(cfg.model.input_size, cfg.model.rgb_means, (2, 0, 1))
     test_net(save_folder, 
